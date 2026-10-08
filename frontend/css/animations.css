@@ -1,0 +1,88 @@
+/* =====================================================================
+   EDRecommend — motion
+   Only transform/opacity are animated (GPU friendly). Everything is
+   switched off for people who prefer reduced motion.
+   ===================================================================== */
+
+/* ---------- entrances ---------- */
+.view.active { animation: view-in 420ms var(--ease); }
+.view-enter { animation: view-in 520ms var(--ease); }
+.stagger > * { animation: rise 520ms var(--ease) both; animation-delay: calc(min(var(--i, 0), 12) * 45ms); }
+.rows > .row { animation: rise 560ms var(--ease) both; animation-delay: calc(var(--i, 0) * 90ms); }
+
+@keyframes view-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes step-in { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes modal-in { from { opacity: 0; transform: translateY(18px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes modal-out { to { opacity: 0; transform: translateY(10px) scale(0.97); } }
+@keyframes menu-in { from { opacity: 0; transform: scale(0.92) translateY(-6px); } to { opacity: 1; transform: none; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(16px) scale(0.9); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(8px) scale(0.96); } }
+
+/* ---------- micro-interactions ---------- */
+@keyframes pop { 0% { transform: scale(1); } 35% { transform: scale(1.45); } 60% { transform: scale(0.88); } 100% { transform: scale(1); } }
+@keyframes spin-in { from { transform: rotate(-90deg) scale(0.6); } to { transform: none; } }
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+/* Disliked cards drift away before being removed. */
+.card.leaving { opacity: 0; transform: scale(0.92) translateY(8px); pointer-events: none; }
+
+/* Burst of hearts on like */
+.burst { position: absolute; pointer-events: none; width: 0; height: 0; z-index: 5; }
+.burst i { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--like); animation: burst 600ms var(--ease) forwards; }
+@keyframes burst { from { opacity: 1; transform: translate(0, 0) scale(1); } to { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); } }
+
+/* ---------- greeting ---------- */
+.greeting .hi { display: inline-block; animation: greet-in 600ms var(--ease) both; }
+.greeting .hi.out { animation: greet-out 500ms var(--ease) forwards; }
+.greeting .wave { display: inline-block; transform-origin: 70% 80%; animation: wave 1.6s ease-in-out 400ms 2; }
+@keyframes greet-in { from { opacity: 0; transform: translateX(-14px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes greet-out { to { opacity: 0; transform: translateY(-8px); filter: blur(4px); } }
+@keyframes wave { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(16deg); } 40% { transform: rotate(-8deg); } 60% { transform: rotate(14deg); } 80% { transform: rotate(-4deg); } }
+
+/* ---------- robot ---------- */
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+.robot-btn.excited { animation: hop 600ms var(--spring); }
+@keyframes hop { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-14px) rotate(-6deg); } 60% { transform: translateY(0) rotate(4deg); } }
+
+/* ---------- ambient light ---------- */
+.ambient span:nth-child(1) { animation: drift-a 26s ease-in-out infinite alternate; }
+.ambient span:nth-child(2) { animation: drift-b 32s ease-in-out infinite alternate; }
+@keyframes drift-a { to { transform: translate(18vmax, 12vmax) scale(1.15); } }
+@keyframes drift-b { to { transform: translate(-16vmax, -10vmax) scale(1.1); } }
+
+/* ---------- splash ---------- */
+.splash.done { animation: splash-out 520ms var(--ease) forwards; }
+@keyframes splash-out { to { opacity: 0; transform: scale(1.04); visibility: hidden; } }
+.splash-mark .draw { stroke-dasharray: 220; stroke-dashoffset: 220; animation: draw 1s var(--ease) forwards; }
+.splash-mark .d2 { animation-delay: 300ms; }
+.splash-mark .pop-dot { transform-origin: 44px 32px; transform: scale(0); animation: dot-pop 500ms var(--spring) 900ms forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes dot-pop { to { transform: scale(1); } }
+.splash-word { animation: rise 700ms var(--ease) 250ms both; }
+.splash-tag span { display: inline-block; animation: rise 600ms var(--ease) both; }
+.splash-tag span:nth-child(1) { animation-delay: 550ms; }
+.splash-tag span:nth-child(2) { animation-delay: 700ms; }
+.splash-tag span:nth-child(3) { animation-delay: 850ms; }
+.progress, .splash-status { animation: fade-in 500ms var(--ease) 600ms both; }
+
+/* ---------- how it works ---------- */
+@keyframes flow { from { transform: translateX(-100%); } to { transform: translateX(560%); } }
+@keyframes flow-y { from { transform: translateY(-100%); } to { transform: translateY(560%); } }
+@keyframes node-glow {
+  0%, 12%, 100% { transform: none; box-shadow: none; border-color: var(--border-strong); }
+  5% { transform: translateY(-4px) scale(1.06); box-shadow: 0 10px 30px -8px var(--accent-2); border-color: var(--accent-1); }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important; animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important;
+  }
+  .ambient span, .robot-btn, .pipe-dot, .pipe-line::after, .empty .em { animation: none !important; }
+}

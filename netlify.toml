@@ -1,0 +1,18 @@
+# Netlify hosts the static website (frontend/). The Python API runs on Render — see render.yaml.
+[build]
+  publish = "frontend"
+  command = ""
+
+# /admin opens the (unlinked) admin panel, same as on the Python server.
+[[redirects]]
+  from = "/admin"
+  to = "/#/admin"
+  status = 302
+
+# Always re-check JS/CSS so a new deploy shows up immediately.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

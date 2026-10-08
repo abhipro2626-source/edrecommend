@@ -1,0 +1,10 @@
+# secrets
+backend/.env
+# frontend/js/config.js is committed on purpose: it only holds public values.
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/

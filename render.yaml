@@ -1,0 +1,18 @@
+# Render runs the Python recommendation API (backend/). The website is on Netlify — see netlify.toml.
+# Render dashboard -> New -> Blueprint -> pick this repository.
+services:
+  - type: web
+    name: edrecommend-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SUPABASE_URL
+        value: https://xgdrlxxgjbaoehxcxscj.supabase.co
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false   # secret: Render asks you to paste it when you create the service

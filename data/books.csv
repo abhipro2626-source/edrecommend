@@ -1,0 +1,136 @@
+title,category,description,tags,rating,image_url
+Python Crash Course,Books,"A hands-on introduction to Python programming that ends with games, data visualisations and web apps.","python, programming, beginners, coding, projects",4.7,https://covers.openlibrary.org/b/id/8245395-L.jpg
+Automate the Boring Stuff with Python,Books,"Teaches practical Python for automating everyday tasks like files, spreadsheets and web scraping.","python, programming, automation, productivity, beginners",4.7,https://covers.openlibrary.org/b/id/7363640-L.jpg
+Clean Code,Books,"Principles and practices for writing readable, maintainable software.","programming, software engineering, best practices, coding",4.4,https://covers.openlibrary.org/b/id/8065615-L.jpg
+The Pragmatic Programmer,Books,"Timeless advice on craftsmanship, career and practical habits for software developers.","programming, software engineering, career, coding",4.6,https://covers.openlibrary.org/b/id/10143650-L.jpg
+"Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow",Books,A practical guide to building machine learning and deep learning systems in Python.,"machine learning, ai, python, deep learning, data science",4.7,https://covers.openlibrary.org/b/id/9388208-L.jpg
+Life 3.0,Books,"Explores how artificial intelligence may reshape work, war, justice and what it means to be human.","ai, artificial intelligence, future, ethics, technology",4.2,https://covers.openlibrary.org/b/id/10239283-L.jpg
+Superintelligence,Books,Examines the risks and strategies around machines that could surpass human intelligence.,"ai, artificial intelligence, philosophy, future, risk",3.9,https://covers.openlibrary.org/b/id/8039542-L.jpg
+"Thinking, Fast and Slow",Books,A Nobel laureate explains the two systems of thought that drive our judgments and biases.,"psychology, decision making, behavioral economics, mind",4.2,https://covers.openlibrary.org/b/id/13290711-L.jpg
+Atomic Habits,Books,A practical framework for building good habits and breaking bad ones through small changes.,"self-help, habits, psychology, productivity",4.4,https://covers.openlibrary.org/b/id/12539702-L.jpg
+Sapiens,Books,A brief history of humankind from early humans to the modern age of science and capitalism.,"history, anthropology, society, science",4.4,https://covers.openlibrary.org/b/id/8634250-L.jpg
+A Brief History of Time,Books,"Stephen Hawking explains black holes, the Big Bang and the nature of time for general readers.","space, physics, cosmology, science, black holes",4.2,https://covers.openlibrary.org/b/id/10432365-L.jpg
+Cosmos,Books,"Carl Sagan's journey through the universe, science history and humanity's place among the stars.","space, astronomy, science, history",4.4,https://covers.openlibrary.org/b/id/8283901-L.jpg
+The Martian (Novel),Books,"An astronaut stranded on Mars survives using science, ingenuity and a sense of humour.","space, sci-fi, survival, science, mars",4.4,https://covers.openlibrary.org/b/id/11447888-L.jpg
+Dune,Books,"On a desert planet, a young noble navigates politics, prophecy and ecology in an epic struggle.","sci-fi, fantasy, politics, ecology, classic",4.3,https://covers.openlibrary.org/b/id/11481354-L.jpg
+Project Hail Mary,Books,A lone astronaut wakes up with no memory and must save Earth from a dying sun.,"space, sci-fi, science, friendship, survival",4.5,https://covers.openlibrary.org/b/id/11200092-L.jpg
+1984,Books,"A classic dystopia about surveillance, propaganda and a totalitarian state.","classic, dystopia, politics, fiction",4.2,https://covers.openlibrary.org/b/id/8745958-L.jpg
+Man's Search for Meaning,Books,A psychiatrist reflects on surviving concentration camps and finding purpose through suffering.,"psychology, philosophy, meaning, history, memoir",4.4,https://covers.openlibrary.org/b/id/11203708-L.jpg
+Influence: The Psychology of Persuasion,Books,Explains six principles of persuasion and how they shape what people say yes to.,"psychology, persuasion, marketing, business",4.3,https://covers.openlibrary.org/b/id/431011-L.jpg
+The Design of Everyday Things,Books,Why some products are a joy to use and others frustrate — the foundations of user-centred design.,"design, ux, psychology, usability, product",4.2,https://upload.wikimedia.org/wikipedia/en/3/33/The_Design_of_Everyday_Things_%28cover_1988%29.jpg
+Don't Make Me Think,Books,"A short, friendly guide to web usability and intuitive interface design.","design, ux, web, usability",4.3,https://covers.openlibrary.org/b/id/554640-L.jpg
+Zero to One,Books,Notes on startups and how to build companies that create something genuinely new.,"business, startups, entrepreneurship, technology",4.2,https://covers.openlibrary.org/b/id/9002334-L.jpg
+The Lean Startup,Books,"A method for building startups through fast experiments, feedback and iteration.","business, startups, entrepreneurship, product",4.1,https://covers.openlibrary.org/b/id/7104760-L.jpg
+Steve Jobs (Biography),Books,Walter Isaacson's biography of Apple's co-founder based on many interviews.,"biography, technology, business, design",4.2,https://covers.openlibrary.org/b/id/12374726-L.jpg
+"Salt, Fat, Acid, Heat",Books,Teaches the four elements of good cooking so you can cook without recipes.,"cooking, food, recipes, kitchen",4.6,https://covers.openlibrary.org/b/id/8315567-L.jpg
+Kitchen Confidential,Books,"A chef's candid, funny memoir about life behind restaurant kitchen doors.","cooking, food, memoir, restaurants",4.1,https://covers.openlibrary.org/b/id/843879-L.jpg
+Fluent Python,Books,"A deep guide to writing idiomatic, effective Python using the language's best features.","python, programming, advanced, software",4.7,https://covers.openlibrary.org/b/id/8743408-L.jpg
+Think Python,Books,"An introduction to programming and computer science using Python, written for beginners.","python, programming, beginners, computer science",4.4,https://covers.openlibrary.org/b/id/7363360-L.jpg
+Python for Data Analysis,Books,"Practical data wrangling with pandas, NumPy and Jupyter from the creator of pandas.","python, pandas, data science, analytics",4.5,https://covers.openlibrary.org/b/id/7548132-L.jpg
+Learning Python,Books,"A thorough, comprehensive tour of the Python language and its core concepts.","python, programming, reference, beginners",4.3,https://covers.openlibrary.org/b/id/1312568-L.jpg
+Effective Python,Books,"Ninety specific ways to write better, more Pythonic code.","python, programming, best practices",4.6,https://covers.openlibrary.org/b/id/7363706-L.jpg
+Eloquent JavaScript,Books,"A modern introduction to programming through JavaScript, with exercises and projects.","javascript, programming, web development, beginners",4.4,https://covers.openlibrary.org/b/id/7082166-L.jpg
+You Don't Know JS Yet,Books,A deep dive into the core mechanisms of the JavaScript language.,"javascript, programming, web development",4.5,https://covers.openlibrary.org/b/id/12539693-L.jpg
+JavaScript: The Good Parts,Books,A short guide to the reliable and elegant subset of JavaScript.,"javascript, programming, classic",4.2,https://covers.openlibrary.org/b/id/9245523-L.jpg
+Introduction to Algorithms,Books,The classic comprehensive textbook on algorithms and data structures.,"algorithms, computer science, data structures, textbook",4.4,https://covers.openlibrary.org/b/id/2341462-L.jpg
+Grokking Algorithms,Books,"An illustrated, friendly guide to common algorithms for programmers.","algorithms, programming, beginners, computer science",4.6,https://covers.openlibrary.org/b/id/8512926-L.jpg
+Cracking the Coding Interview,Books,Programming questions and solutions to prepare for technical job interviews.,"interviews, algorithms, career, programming",4.7,https://covers.openlibrary.org/b/id/7276811-L.jpg
+The Algorithm Design Manual,Books,Practical algorithm design techniques with real-world war stories.,"algorithms, computer science, problem solving",4.5,https://covers.openlibrary.org/b/id/245565-L.jpg
+Structure and Interpretation of Computer Programs,Books,A classic MIT text on the fundamentals of programming using Scheme.,"computer science, programming, classic, lisp",4.5,https://covers.openlibrary.org/b/id/149338-L.jpg
+Code: The Hidden Language of Computer Hardware and Software,Books,"How computers work, from Morse code and switches to processors.","computers, hardware, computer science, history",4.6,https://upload.wikimedia.org/wikipedia/en/7/7f/Code_The_Hidden_Language_of_Computer_Hardware_and_Software.jpg
+The Mythical Man-Month,Books,Essays on software engineering and why adding people to late projects makes them later.,"software engineering, management, classic",4.3,https://covers.openlibrary.org/b/id/6915361-L.jpg
+Refactoring,Books,A catalogue of techniques for improving the design of existing code.,"programming, software engineering, best practices",4.5,https://covers.openlibrary.org/b/id/7087623-L.jpg
+Design Patterns,Books,The famous catalogue of reusable object-oriented software design patterns.,"programming, software design, object oriented, classic",4.3,https://covers.openlibrary.org/b/id/6601119-L.jpg
+Designing Data-Intensive Applications,Books,"How databases, streams and distributed systems work and how to choose between them.","databases, distributed systems, software architecture, backend",4.8,https://covers.openlibrary.org/b/id/8434671-L.jpg
+Clean Architecture,Books,Principles for structuring software systems so they stay maintainable.,"software architecture, programming, best practices",4.3,https://covers.openlibrary.org/b/id/8605114-L.jpg
+Head First Design Patterns,Books,"A visual, brain-friendly introduction to design patterns in Java.","programming, design patterns, java, beginners",4.5,https://covers.openlibrary.org/b/id/388950-L.jpg
+The Art of Computer Programming,Books,Donald Knuth's monumental multi-volume work on algorithms and analysis.,"algorithms, computer science, mathematics, classic",4.6,https://covers.openlibrary.org/b/id/136600-L.jpg
+Deep Learning,Books,The foundational textbook on deep neural networks and their mathematics.,"deep learning, ai, machine learning, mathematics",4.5,https://covers.openlibrary.org/b/id/8086288-L.jpg
+Pattern Recognition and Machine Learning,Books,A comprehensive textbook on probabilistic machine learning.,"machine learning, statistics, ai, textbook",4.4,https://covers.openlibrary.org/b/id/245089-L.jpg
+Artificial Intelligence: A Modern Approach,Books,The standard university textbook covering the whole field of AI.,"ai, artificial intelligence, computer science, textbook",4.4,https://upload.wikimedia.org/wikipedia/en/e/e5/Artificial_Intelligence-_A_Modern_Approach.jpg
+The Hundred-Page Machine Learning Book,Books,A concise overview of machine learning concepts and algorithms.,"machine learning, ai, beginners, data science",4.5,https://covers.openlibrary.org/b/id/10390246-L.jpg
+Deep Learning with Python,Books,A practical introduction to deep learning using Keras from its creator.,"deep learning, python, keras, ai",4.6,https://covers.openlibrary.org/b/id/8507718-L.jpg
+An Introduction to Statistical Learning,Books,An accessible introduction to statistical learning methods with examples.,"statistics, machine learning, data science, r",4.7,https://covers.openlibrary.org/b/id/8665540-L.jpg
+Weapons of Math Destruction,Books,How algorithms and big data can reinforce inequality and harm society.,"ai, ethics, data science, society",4.0,https://covers.openlibrary.org/b/id/8136557-L.jpg
+Human Compatible,Books,How to build artificial intelligence that remains beneficial to humans.,"ai, ethics, future, artificial intelligence",4.1,https://covers.openlibrary.org/b/id/11264186-L.jpg
+The Master Algorithm,Books,A tour of the five main schools of machine learning and the search for a universal learner.,"machine learning, ai, popular science",3.9,https://covers.openlibrary.org/b/id/9321915-L.jpg
+AI Superpowers,Books,How China and the United States are competing to lead the age of artificial intelligence.,"ai, business, china, future",4.1,https://covers.openlibrary.org/b/id/8276796-L.jpg
+The Alignment Problem,Books,How researchers are trying to make machine learning systems share human values.,"ai, ethics, machine learning, society",4.4,https://covers.openlibrary.org/b/id/10678431-L.jpg
+Naked Statistics,Books,"A fun, plain-English explanation of the statistics behind everyday decisions.","statistics, mathematics, data science, popular science",4.1,https://covers.openlibrary.org/b/id/8425495-L.jpg
+How to Lie with Statistics,Books,A classic short book about how statistics can mislead readers.,"statistics, critical thinking, data, classic",4.0,https://covers.openlibrary.org/b/id/13115835-L.jpg
+The Signal and the Noise,Books,Why most predictions fail and how some forecasters get it right.,"statistics, prediction, data science, economics",4.0,https://covers.openlibrary.org/b/id/7256893-L.jpg
+Freakonomics,Books,An economist explores the hidden side of everyday life using data.,"economics, data, society, popular science",4.0,https://covers.openlibrary.org/b/id/11172914-L.jpg
+The Black Swan,Books,"How rare, unpredictable events shape our world and why we underestimate them.","economics, probability, philosophy, risk",3.9,https://covers.openlibrary.org/b/id/5721840-L.jpg
+"Gödel, Escher, Bach",Books,"An exploration of consciousness, logic and self-reference through maths, art and music.","mathematics, ai, philosophy, logic",4.3,https://covers.openlibrary.org/b/id/14368453-L.jpg
+Fermat's Last Theorem,Books,The story of a 350-year-old maths problem and the man who solved it.,"mathematics, history, popular science",4.3,https://covers.openlibrary.org/b/id/885225-L.jpg
+The Code Book,Books,A history of cryptography from ancient ciphers to quantum encryption.,"cryptography, history, cybersecurity, mathematics",4.3,https://covers.openlibrary.org/b/id/8231826-L.jpg
+The Man Who Knew Infinity,Books,The life of the self-taught Indian mathematical genius Srinivasa Ramanujan.,"mathematics, biography, india, history",4.2,https://covers.openlibrary.org/b/id/408314-L.jpg
+The Joy of x,Books,"Short, playful essays explaining the big ideas of mathematics.","mathematics, popular science, beginners",4.0,https://covers.openlibrary.org/b/id/9266506-L.jpg
+The Selfish Gene,Books,"How evolution works at the level of genes, introducing the idea of memes.","biology, evolution, science, classic",4.1,https://covers.openlibrary.org/b/id/133936-L.jpg
+The Gene: An Intimate History,Books,"The history and future of genetics, told through science and family.","biology, genetics, history, medicine",4.4,https://upload.wikimedia.org/wikipedia/en/8/81/The_Gene_An_Intimate_History_cover.jpg
+The Emperor of All Maladies,Books,A biography of cancer from its first descriptions to modern treatment.,"medicine, history, science, biography",4.3,https://covers.openlibrary.org/b/id/11320203-L.jpg
+The Immortal Life of Henrietta Lacks,Books,The story of the woman whose cells changed medical research forever.,"medicine, science, ethics, biography",4.1,https://covers.openlibrary.org/b/id/8364866-L.jpg
+Astrophysics for People in a Hurry,Books,"A short, witty guide to the universe's biggest ideas.","astronomy, physics, space, popular science",4.1,https://covers.openlibrary.org/b/id/7984709-L.jpg
+The Elegant Universe,Books,An accessible introduction to string theory and the search for a theory of everything.,"physics, string theory, cosmology, popular science",4.1,https://covers.openlibrary.org/b/id/1007630-L.jpg
+Seven Brief Lessons on Physics,Books,"A short, poetic introduction to modern physics.","physics, science, popular science",3.9,https://upload.wikimedia.org/wikipedia/en/f/f9/Seven_Brief_Lessons_on_Physics.jpg
+"Surely You're Joking, Mr. Feynman!",Books,Humorous stories from the life of physicist Richard Feynman.,"physics, biography, humour, science",4.3,https://covers.openlibrary.org/b/id/9274698-L.jpg
+Pale Blue Dot,Books,Carl Sagan's vision of humanity's future in space.,"space, astronomy, philosophy, science",4.3,https://covers.openlibrary.org/b/id/14417175-L.jpg
+The Right Stuff (Book),Books,The story of test pilots and the first American astronauts.,"space, aviation, history, nasa",4.2,https://covers.openlibrary.org/b/id/3326778-L.jpg
+Packing for Mars,Books,"The strange science of life in space, from toilets to food.","space, science, humour, nasa",3.9,https://covers.openlibrary.org/b/id/6455470-L.jpg
+An Astronaut's Guide to Life on Earth,Books,Lessons for life from an astronaut who commanded the International Space Station.,"space, astronauts, self-help, biography",4.2,https://covers.openlibrary.org/b/id/7459498-L.jpg
+Wings of Fire,Books,"The autobiography of A. P. J. Abdul Kalam, India's missile man and president.","biography, science, india, inspiration, space",4.6,https://covers.openlibrary.org/b/id/9153819-L.jpg
+Ignited Minds,Books,A. P. J. Abdul Kalam's call to young Indians to dream and achieve.,"india, inspiration, education, leadership",4.4,https://covers.openlibrary.org/b/id/10369810-L.jpg
+Elon Musk,Books,"A biography of the entrepreneur behind Tesla, SpaceX and other companies.","biography, technology, business, space",4.1,https://covers.openlibrary.org/b/id/14420016-L.jpg
+The Innovators,Books,"How hackers, geniuses and geeks created the digital revolution.","technology, history, computers, biography",4.2,https://covers.openlibrary.org/b/id/7313659-L.jpg
+Shoe Dog,Books,The memoir of Nike's founder and the early struggles of building the company.,"business, biography, startups, sports",4.5,https://covers.openlibrary.org/b/id/8858487-L.jpg
+The Hard Thing About Hard Things,Books,Honest advice on building and running a startup when things go wrong.,"startups, business, leadership, management",4.3,https://covers.openlibrary.org/b/id/7279515-L.jpg
+Good to Great,Books,Why some companies make the leap to lasting greatness and others don't.,"business, management, leadership",4.1,https://covers.openlibrary.org/b/id/7431270-L.jpg
+The Innovator's Dilemma,Books,Why successful companies often fail when new technologies appear.,"business, innovation, technology, strategy",4.0,https://covers.openlibrary.org/b/id/9274687-L.jpg
+Rework,Books,"Short, blunt advice for running a business in a simpler way.","business, startups, productivity",4.0,https://covers.openlibrary.org/b/id/6679955-L.jpg
+Start with Why,Books,How great leaders inspire action by starting with purpose.,"leadership, business, motivation",4.1,https://covers.openlibrary.org/b/id/6395237-L.jpg
+Hooked,Books,How products build habits that keep users coming back.,"product design, psychology, startups, technology",4.1,https://covers.openlibrary.org/b/id/12511799-L.jpg
+Inspired,Books,"How to create technology products customers love, from product management experts.","product management, technology, startups",4.3,https://covers.openlibrary.org/b/id/9700654-L.jpg
+The Mom Test,Books,How to talk to customers and learn whether your business idea is good.,"startups, business, customer research",4.5,https://covers.openlibrary.org/b/id/10660557-L.jpg
+Rich Dad Poor Dad,Books,"Lessons about money, investing and financial independence.","finance, money, self-help, investing",4.1,https://covers.openlibrary.org/b/id/8315603-L.jpg
+The Psychology of Money,Books,Short stories about how people think about money and make financial decisions.,"finance, psychology, money, behaviour",4.4,https://covers.openlibrary.org/b/id/10389354-L.jpg
+The Intelligent Investor,Books,The classic guide to value investing.,"finance, investing, economics, classic",4.3,https://covers.openlibrary.org/b/id/36434-L.jpg
+Deep Work,Books,Rules for focused success in a distracted world.,"productivity, focus, self-help, careers",4.2,https://covers.openlibrary.org/b/id/7988607-L.jpg
+So Good They Can't Ignore You,Books,Why skills matter more than passion in building a career you love.,"careers, productivity, self-help",4.1,https://covers.openlibrary.org/b/id/9215292-L.jpg
+Digital Minimalism,Books,How to reduce screen time and use technology more intentionally.,"productivity, technology, self-help, wellbeing",4.0,https://covers.openlibrary.org/b/id/8507540-L.jpg
+The 7 Habits of Highly Effective People,Books,A classic framework for personal and professional effectiveness.,"self-help, productivity, leadership, classic",4.1,https://covers.openlibrary.org/b/id/10079937-L.jpg
+Mindset,Books,How a growth mindset can help you learn and succeed.,"psychology, education, self-help, learning",4.1,https://covers.openlibrary.org/b/id/746414-L.jpg
+Grit,Books,Why passion and perseverance matter more than talent.,"psychology, motivation, education, self-help",4.1,https://covers.openlibrary.org/b/id/7438753-L.jpg
+Make It Stick,Books,"The science of successful learning, from cognitive psychology research.","learning, education, psychology, study skills",4.2,https://covers.openlibrary.org/b/id/8188891-L.jpg
+Ultralearning,Books,Strategies for mastering hard skills quickly through self-directed learning.,"learning, education, productivity, self-help",4.0,https://covers.openlibrary.org/b/id/10156205-L.jpg
+The Power of Habit,Books,Why habits exist and how they can be changed.,"psychology, habits, self-help, behaviour",4.1,https://covers.openlibrary.org/b/id/9078085-L.jpg
+Quiet,Books,The power of introverts in a world that can't stop talking.,"psychology, personality, society, self-help",4.1,https://covers.openlibrary.org/b/id/7079753-L.jpg
+Predictably Irrational,Books,The hidden forces that shape our decisions.,"psychology, economics, behaviour, decision making",4.1,https://covers.openlibrary.org/b/id/2314080-L.jpg
+Nudge,Books,"How small changes in choices can improve decisions about health, wealth and happiness.","psychology, economics, behaviour, policy",3.9,https://covers.openlibrary.org/b/id/6402116-L.jpg
+Flow,Books,The psychology of optimal experience and deep enjoyment.,"psychology, happiness, focus, wellbeing",4.1,https://covers.openlibrary.org/b/id/11041932-L.jpg
+Emotional Intelligence,Books,Why emotional skills can matter more than IQ.,"psychology, emotions, self-help, relationships",4.0,https://covers.openlibrary.org/b/id/1359485-L.jpg
+The Body Keeps the Score,Books,"How trauma affects the brain and body, and paths to recovery.","psychology, mental health, medicine, trauma",4.4,https://covers.openlibrary.org/b/id/8315367-L.jpg
+Why We Sleep,Books,The science of sleep and why it matters for health.,"science, health, sleep, psychology",4.3,https://covers.openlibrary.org/b/id/8814155-L.jpg
+The Man Who Mistook His Wife for a Hat,Books,Case studies of unusual neurological conditions.,"psychology, neuroscience, medicine, case studies",4.1,https://covers.openlibrary.org/b/id/6986188-L.jpg
+Ikigai,Books,The Japanese secret to a long and happy life.,"wellbeing, happiness, japan, self-help",3.9,https://covers.openlibrary.org/b/id/11300391-L.jpg
+The Alchemist,Books,A shepherd boy travels to Egypt in search of treasure and his personal legend.,"fiction, philosophy, adventure, inspiration",3.9,https://covers.openlibrary.org/b/id/11556106-L.jpg
+To Kill a Mockingbird,Books,A young girl sees racial injustice in her small Southern town through her father's trial.,"fiction, classic, justice, society",4.3,https://covers.openlibrary.org/b/id/14351077-L.jpg
+The Great Gatsby,Books,A mysterious millionaire's obsession with a lost love in 1920s New York.,"fiction, classic, romance, america",3.9,https://covers.openlibrary.org/b/id/10590366-L.jpg
+Pride and Prejudice,Books,The witty romance between Elizabeth Bennet and Mr Darcy.,"fiction, classic, romance",4.3,https://covers.openlibrary.org/b/id/14348537-L.jpg
+Brave New World,Books,A future society engineered for happiness at the cost of freedom.,"fiction, dystopia, sci-fi, classic",4.0,https://covers.openlibrary.org/b/id/8231823-L.jpg
+Fahrenheit 451,Books,A fireman whose job is to burn books begins to question his society.,"fiction, dystopia, sci-fi, classic",4.0,https://covers.openlibrary.org/b/id/12993656-L.jpg
+Animal Farm,Books,"Farm animals overthrow their owner, only to be ruled by the pigs.","fiction, classic, politics, satire",4.0,https://covers.openlibrary.org/b/id/11261770-L.jpg
+The Hitchhiker's Guide to the Galaxy,Books,An ordinary man is whisked through space after Earth is demolished.,"sci-fi, comedy, space, classic",4.2,https://covers.openlibrary.org/b/id/12986869-L.jpg
+Foundation,Books,A mathematician predicts the fall of a galactic empire and plans to shorten the dark age.,"sci-fi, space, mathematics, classic",4.2,https://covers.openlibrary.org/b/id/14612610-L.jpg
+"I, Robot (Book)",Books,Short stories about robots and the Three Laws of Robotics.,"sci-fi, robots, ai, classic",4.2,https://covers.openlibrary.org/b/id/12385229-L.jpg
+Neuromancer,Books,A washed-up hacker is hired for one last job in a cyberpunk future.,"sci-fi, cyberpunk, hacking, ai",3.9,https://covers.openlibrary.org/b/id/283860-L.jpg
+Do Androids Dream of Electric Sheep?,Books,A bounty hunter tracks rogue androids in a post-apocalyptic world.,"sci-fi, ai, robots, classic",4.1,https://covers.openlibrary.org/b/id/207515-L.jpg
+Ender's Game,Books,A gifted child is trained at a military school in space to fight an alien race.,"sci-fi, space, strategy, coming of age",4.3,https://covers.openlibrary.org/b/id/12996033-L.jpg
+The Three-Body Problem,Books,Humanity makes contact with an alien civilisation during China's Cultural Revolution.,"sci-fi, physics, aliens, china",4.1,https://covers.openlibrary.org/b/id/10526598-L.jpg
+Snow Crash,Books,A hacker and pizza deliverer uncovers a virus spreading through the virtual Metaverse.,"sci-fi, cyberpunk, virtual reality, hacking",4.0,https://covers.openlibrary.org/b/id/392508-L.jpg
+Ready Player One (Novel),Books,A teenager hunts for an Easter egg hidden in a vast virtual reality game.,"sci-fi, gaming, virtual reality, adventure",4.2,https://covers.openlibrary.org/b/id/8737626-L.jpg
+Klara and the Sun,Books,An artificial friend observes the family she serves with love and curiosity.,"sci-fi, ai, robots, literary fiction",3.9,https://covers.openlibrary.org/b/id/10648686-L.jpg
+Frankenstein,Books,A scientist creates a living being and is horrified by what he has made.,"fiction, classic, science, horror",3.9,https://covers.openlibrary.org/b/id/12356249-L.jpg
+The Hobbit,Books,Bilbo Baggins joins a group of dwarves on a quest to reclaim their treasure from a dragon.,"fantasy, adventure, classic",4.3,https://covers.openlibrary.org/b/id/14627509-L.jpg
+The Lord of the Rings,Books,The epic quest to destroy a powerful ring and defeat the Dark Lord Sauron.,"fantasy, adventure, classic, epic",4.5,https://covers.openlibrary.org/b/id/14625765-L.jpg
+Harry Potter and the Philosopher's Stone,Books,A boy discovers he is a wizard and begins school at Hogwarts.,"fantasy, magic, school, adventure",4.5,https://covers.openlibrary.org/b/id/15155833-L.jpg
+The Name of the Wind,Books,"A legendary figure tells the story of his youth, magic studies and tragedy.","fantasy, magic, adventure",4.5,https://covers.openlibrary.org/b/id/11480483-L.jpg
