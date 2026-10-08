@@ -211,13 +211,27 @@ class Recommender:
             return np.zeros(len(self.df))
         return cosine_similarity(vec, self.matrix).ravel()
 
+    def query_categories(self, query: str) -> set[str]:
+        """Categories a search names, e.g. "space movies" → {"Movies"}."""
+        words = set(re.findall(r"[a-z]+", query.lower()))
+        found = set()
+        for category in self.categories:
+            names = config.CATEGORY_WORDS.get(category, []) + [category.lower(), category.lower().rstrip("s")]
+            if words & set(names):
+                found.add(category)
+        return found
+
     def score(self, ctx: UserContext, query: str = "", signals: Signals | None = None) -> pd.DataFrame:
         """Return a DataFrame with each score component and the final score."""
         signals = signals or self.build_signals(ctx)
         query_vec = self._text_vec(query)
         content = self._similarity(query_vec if query.strip() else signals.intent_vec)
+        # A search that names a category ("space movies") should mostly return that category,
+        # even when the user's history leans elsewhere.
+        asked = self.query_categories(query) if query.strip() else set()
+        category_bonus = config.W_QUERY_CATEGORY * self.df["category"].isin(asked).to_numpy() if asked else 0
         parts = pd.DataFrame({
-            "content": config.W_CONTENT * content,
+            "content": config.W_CONTENT * content + category_bonus,
             "preference": config.W_PREFERENCE * self._similarity(signals.pref_vec),
             "behaviour": config.W_BEHAVIOUR * self._similarity(signals.behaviour_vec),
             "rating": config.W_RATING * self.df["norm_rating"].to_numpy(),

@@ -6,7 +6,7 @@ import pytest
 
 import config
 import seed
-from recommender import Recommender
+from recommender import Recommender, UserContext
 
 BUILTIN = config.DEFAULT_CATEGORIES
 
@@ -48,3 +48,30 @@ def test_engine_on_full_catalog():
     engine = Recommender(items=items)
     assert len(engine.df) == 135 * len(BUILTIN)
     assert engine.categories == BUILTIN
+
+
+@pytest.fixture(scope="module")
+def full_engine():
+    items = [{**row, "id": i} for i, row in enumerate(seed.demo_items(), start=1)]
+    return Recommender(items=items)
+
+
+def _liked(engine, title):
+    item_id = int(engine.df.loc[engine.df["title"] == title, "id"].iloc[0])
+    return UserContext(interactions=[{"item_id": item_id, "action": "like", "created_at": None}])
+
+
+@pytest.mark.parametrize("query,category", [
+    ("space movies", "Movies"), ("python course", "Courses"), ("psychology books", "Books"),
+    ("data science jobs", "Jobs"), ("puzzle games", "Games"),
+])
+def test_search_naming_a_category_returns_that_category(full_engine, query, category):
+    # A games fan (liked Red Dead Redemption 2) still gets the category they asked for.
+    ctx = _liked(full_engine, "Red Dead Redemption 2")
+    top = full_engine.recommend(ctx, query, limit=8)["items"]
+    assert [i["category"] for i in top].count(category) >= 7, [(i["title"], i["category"]) for i in top]
+
+
+def test_search_without_category_word_stays_mixed(full_engine):
+    top = full_engine.recommend(UserContext(), "artificial intelligence", limit=20)["items"]
+    assert len({i["category"] for i in top}) >= 3
