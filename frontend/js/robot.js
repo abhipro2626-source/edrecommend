@@ -2,12 +2,12 @@
 import { $ } from './utils.js';
 
 const TIPS = [
-  'Tip: like things you enjoy — your Made For You rows update instantly.',
-  'Tip: 👎 hides an item and similar ones drop in your ranking.',
-  'Tip: open any card and check "Why this?" to see the score breakdown.',
-  'Tip: try searching "space", "psychology" or "learn python".',
-  'Tip: your Profile shows your taste as a radar chart.',
-];
+  'Tip: 👍 Like or 💖 Love things — Love counts extra and your rows update instantly.',
+  'Tip: “Not for me” hides an item, and you can undo it from the message that pops up.',
+  'Tip: open any card and read “Why we recommended this” to see the score breakdown.',
+  'Tip: try searching “space movies”, “psychology books” or “learn python”.',
+  'Tip: each profile has its own taste — switch profiles from your avatar menu.',
+]
 
 let hideTimer = null;
 let idleTimer = null;
@@ -51,6 +51,11 @@ export function initRobot(onSurprise) {
     }
   });
   ['pointerdown', 'keydown', 'scroll'].forEach((ev) => addEventListener(ev, resetIdle, { passive: true }));
+}
+
+/** Step aside (e.g. while the details overlay is open) without forgetting state. */
+export function robotAway(away) {
+  $('#robot')?.classList.toggle('away', away);
 }
 
 export function hideRobot() {

@@ -75,3 +75,42 @@ def test_search_naming_a_category_returns_that_category(full_engine, query, cate
 def test_search_without_category_word_stays_mixed(full_engine):
     top = full_engine.recommend(UserContext(), "artificial intelligence", limit=20)["items"]
     assert len({i["category"] for i in top}) >= 3
+
+
+def _ctx(engine, *pairs):
+    rows = []
+    for title, action in pairs:
+        item_id = int(engine.df.loc[engine.df["title"] == title, "id"].iloc[0])
+        rows.append({"item_id": item_id, "action": action, "created_at": None})
+    return UserContext(name="Rahul", interactions=rows)
+
+
+def test_home_rows_follow_the_brief_order(full_engine):
+    ctx = _ctx(full_engine, ("Interstellar", "love"), ("Python Crash Course", "like"),
+               ("Cosmos", "save"), ("The Martian", "view"))
+    home = full_engine.home(ctx, {})
+    ids = [r["id"] for r in home["rows"]]
+    assert ids[:5] == ["top", "because-0", "because-1", "top10", "universe"]
+    assert {"continue", "mylist"} <= set(ids)
+    assert 1 <= len(home["hero"]) <= 3 and all(h["image_url"] for h in home["hero"])
+    top10 = next(r for r in home["rows"] if r["id"] == "top10")
+    assert [i["rank"] for i in top10["items"]] == list(range(1, 11))
+    universe = next(r for r in home["rows"] if r["id"] == "universe")
+    assert "Movies" not in {i["category"] for i in universe["items"]}      # anchor was a movie
+    assert len({i["category"] for i in universe["items"]}) >= 3
+
+
+def test_love_counts_more_than_like(full_engine):
+    loved = full_engine.build_signals(_ctx(full_engine, ("Interstellar", "love")))
+    liked = full_engine.build_signals(_ctx(full_engine, ("Interstellar", "like")))
+    assert loved.liked == liked.liked and loved.loved and not liked.loved
+    item = full_engine.home(_ctx(full_engine, ("Interstellar", "love")), {})["rows"][0]["items"][0]
+    assert "loved" in item and "liked" in item
+
+
+def test_category_page(full_engine):
+    page = full_engine.category_page(_ctx(full_engine, ("Interstellar", "like")), "movies", {})
+    assert page["category"] == "Movies" and page["tags"]
+    assert all(i["category"] == "Movies" for r in page["rows"] for i in r["items"])
+    assert [r["id"] for r in page["rows"]][:3] == ["picks", "because", "top-rated"]
+    assert full_engine.category_page(UserContext(), "nope", {})["category"] is None

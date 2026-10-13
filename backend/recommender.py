@@ -14,8 +14,10 @@ The TF-IDF matrix is cached in memory and rebuilt only when items change.
 from __future__ import annotations
 
 import math
+import random
 import re
 import threading
+import zlib
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -45,7 +47,9 @@ class Signals:
     pref_vec: object = None        # liked / saved items + stated interests
     behaviour_vec: object = None   # viewed / clicked items
     dislike_vec: object = None     # disliked items
-    liked: list[int] = field(default_factory=list)     # most recent first
+    liked: list[int] = field(default_factory=list)     # liked or loved, most recent first
+    loved: set[int] = field(default_factory=set)
+    viewed: list[int] = field(default_factory=list)    # most recent first
     saved: set[int] = field(default_factory=set)
     disliked: set[int] = field(default_factory=set)
     category_affinity: dict[str, float] = field(default_factory=dict)
@@ -160,18 +164,20 @@ class Recommender:
         pref, behaviour, dislike = defaultdict(float), defaultdict(float), defaultdict(float)
         cat_aff = defaultdict(float)
         state: dict[tuple[int, str], str] = {}
-        liked_order = []
+        liked_order, viewed_order = [], []
         for row in sorted(ctx.interactions, key=lambda r: str(r.get("created_at") or ""), reverse=True):
             item_id, action = int(row["item_id"]), row["action"]
             if item_id not in self.id_to_idx:
                 continue
             w = config.ACTION_WEIGHTS.get(action, 0) * _decay(row.get("created_at"), now)
-            if action in ("like", "save"):
+            if action in ("like", "love", "save"):
                 pref[item_id] += w
-                if action == "like" and item_id not in liked_order:
+                if action in ("like", "love") and item_id not in liked_order:
                     liked_order.append(item_id)
             elif action in ("view", "click"):
                 behaviour[item_id] += w
+                if item_id not in viewed_order:
+                    viewed_order.append(item_id)
             elif action == "dislike":
                 dislike[item_id] += -w
             category = self.df.at[self.id_to_idx[item_id], "category"]
@@ -180,6 +186,8 @@ class Recommender:
 
         signals = Signals(
             liked=liked_order,
+            loved={i for (i, a) in state if a == "love"},
+            viewed=viewed_order,
             saved={i for (i, a) in state if a == "save"},
             disliked={i for (i, a) in state if a == "dislike"},
         )
@@ -317,7 +325,8 @@ class Recommender:
             "reasons": reasons or self._reasons(idx, row, query_vec, signals),
             "breakdown": {k: round(float(row[k]), 4) for k in
                           ("content", "preference", "behaviour", "rating", "category", "penalty")},
-            "liked": int(item["id"]) in signals.liked,
+            "liked": int(item["id"]) in signals.liked and int(item["id"]) not in signals.loved,
+            "loved": int(item["id"]) in signals.loved,
             "saved": int(item["id"]) in signals.saved,
         }
 
@@ -400,26 +409,78 @@ class Recommender:
             out.append(self._to_item(j, scores.loc[j], m, None, signals, reasons))
         return out
 
-    def made_for_you(self, ctx: UserContext, popularity: dict[int, int] | None = None) -> list[dict]:
-        """Personalised rows for the home screen."""
+    # ---------------------------------------------------------------- rows
+    def _cards(self, indices, scores: pd.DataFrame, signals: Signals, reason=None,
+               top: float | None = None) -> list[dict]:
+        """Turn row indices into cards. `reason` is a string or a function idx -> list[str]."""
+        indices = list(indices)
+        if not indices:
+            return []
+        top = top if top is not None else float(scores["final"].max())
+        matches = self._match_percent(scores.loc[indices, "final"].to_numpy(), top)
+        out = []
+        for j, m in zip(indices, matches):
+            reasons = reason(j) if callable(reason) else ([reason] if reason else None)
+            out.append(self._to_item(j, scores.loc[j], m, None, signals, reasons))
+        return out
+
+    def _popularity_rank(self, popularity: dict[int, int] | None, signals: Signals, salt: str) -> pd.Series:
+        """Top-10 ranking: what people engage with + rating, varied a little each day."""
+        pop = self.df["id"].map(popularity or {}).fillna(0).to_numpy(dtype=float)
+        pop = pop / pop.max() if pop.max() > 0 else pop
+        jitter = self.df["id"].map(lambda i: (zlib.crc32(f"{salt}:{int(i)}".encode()) % 1000) / 1000).to_numpy()
+        rank = pd.Series(0.55 * pop + 0.35 * self.df["norm_rating"].to_numpy() + 0.10 * jitter,
+                         index=self.df.index)
+        return rank[~self.df["id"].isin(signals.disliked)].sort_values(ascending=False)
+
+    def home(self, ctx: UserContext, popularity: dict[int, int] | None = None) -> dict:
+        """Hero billboard items + personalised rows for the home screen (empty rows are dropped)."""
         self.ensure_loaded()
         if self.df.empty:
-            return []
+            return {"hero": [], "rows": []}
         signals = self.build_signals(ctx)
+        scores = self.score(ctx, "", signals)
         name = ctx.name or "you"
-        rows = [{
-            "id": "top", "title": f"Top Picks for {name}",
-            "items": self.recommend(ctx, limit=16, discover=True, diverse=True, signals=signals)["items"],
-        }]
+        rows = []
 
-        if signals.liked:
-            anchor = signals.liked[0]
+        top_picks = self.recommend(ctx, limit=20, discover=True, diverse=True, signals=signals)["items"]
+        rows.append({"id": "top", "title": f"Top Picks for {name}", "items": top_picks[:16]})
+
+        for n, anchor in enumerate(signals.liked[:2]):
             title = self.df.at[self.id_to_idx[anchor], "title"]
-            items = [i for i in self.similar(anchor, ctx, 12, signals) if not i["liked"]]
+            items = [i for i in self.similar(anchor, ctx, 14, signals) if not i["liked"] and not i["loved"]]
             for i in items:
                 i["reasons"] = [f"Because you liked {title}"] + i["reasons"][1:]
-            if items:
-                rows.append({"id": "because", "title": f"Because you liked {title}", "items": items})
+            rows.append({"id": f"because-{n}", "title": f"Because you liked {title}", "items": items[:12]})
+
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        top10 = self._popularity_rank(popularity, signals, today).head(10)
+        cards = self._cards(top10.index, scores, signals, "In today's Top 10")
+        rows.append({"id": "top10", "kind": "top10", "title": "Top 10 on EDRecommend Today",
+                     "items": [{**c, "rank": r} for r, c in enumerate(cards, start=1)]})
+
+        anchor = signals.liked[0] if signals.liked else (top_picks[0]["id"] if top_picks else None)
+        if anchor in self.id_to_idx:
+            a_idx = self.id_to_idx[anchor]
+            a_cat = self.df.at[a_idx, "category"]
+            sim = pd.Series(cosine_similarity(self.matrix[a_idx], self.matrix).ravel(), index=self.df.index)
+            other = sim[(self.df["category"] != a_cat) & ~self.df["id"].isin(signals.disliked) & (sim > 0.03)]
+            picks, per_cat = [], Counter()
+            for j in other.sort_values(ascending=False).index:
+                cat = self.df.at[j, "category"]
+                if per_cat[cat] < 2:
+                    picks.append(j)
+                    per_cat[cat] += 1
+                if len(picks) == 12:
+                    break
+            title = self.df.at[a_idx, "title"]
+
+            def universe_reason(j):
+                kind = self.df.at[j, "category"].lower().rstrip("s")
+                return [f"A {kind} pick inspired by {title}"]
+
+            rows.append({"id": "universe", "title": f"Across the Universe · inspired by {title}",
+                         "items": self._cards(picks, scores, signals, universe_reason)})
 
         favourite = max(signals.category_affinity, key=signals.category_affinity.get) \
             if signals.category_affinity else None
@@ -429,23 +490,82 @@ class Recommender:
             top_pop = max(pop.values(), default=0) or 1
             trending.sort(key=lambda i: 0.5 * pop.get(i["id"], 0) / top_pop + 0.5 * i["match_percent"] / 100,
                           reverse=True)
-            if trending:
-                rows.append({"id": "trending", "title": f"Trending in {favourite}", "items": trending[:12]})
+            rows.append({"id": "trending", "title": f"Trending in {favourite}", "items": trending[:12]})
+
+        recent = [self.id_to_idx[i] for i in signals.viewed if i not in signals.disliked][:12]
+        rows.append({"id": "continue", "title": "Continue Exploring",
+                     "items": self._cards(recent, scores, signals, "You looked at this recently")})
 
         explored = {c for c, v in signals.category_affinity.items() if v > 0}
         fresh_df = self.df[~self.df["category"].isin(explored) & ~self.df["id"].isin(signals.disliked)]
         if not fresh_df.empty:
-            scores = self.score(ctx, "", signals)
             fresh = (0.6 * fresh_df["norm_rating"] + scores.loc[fresh_df.index, "final"]).sort_values(ascending=False)
             fresh = self._diversify(fresh, 12).head(12)
-            matches = self._match_percent(scores.loc[fresh.index, "final"].to_numpy(),
-                                          float(scores["final"].max()))
-            items = [self._to_item(j, scores.loc[j], m, None, signals,
-                                   [f"Something new in {self.df.at[j, 'category']}",
-                                    f"Rated {self.df.at[j, 'rating']:g}" if pd.notna(self.df.at[j, 'rating']) else "Fresh pick"])
-                     for j, m in zip(fresh.index, matches)]
-            rows.append({"id": "new", "title": "Something new", "items": items})
-        return [r for r in rows if r["items"]]
+
+            def fresh_reason(j):
+                rating = self.df.at[j, "rating"]
+                return [f"Something new in {self.df.at[j, 'category']}"] + \
+                    ([f"Rated {rating:g}"] if pd.notna(rating) else [])
+
+            rows.append({"id": "new", "title": "Something New for You",
+                         "items": self._cards(fresh.index, scores, signals, fresh_reason)})
+
+        saved = [self.id_to_idx[i] for i in signals.saved if i in self.id_to_idx]
+        rows.append({"id": "mylist", "title": "My List", "items": self._cards(saved, scores, signals, "On your list")})
+
+        liked_cats = [c for c, v in sorted(signals.category_affinity.items(), key=lambda kv: -kv[1]) if v > 0]
+        for c in liked_cats[:3]:
+            items = self.recommend(ctx, category=c, limit=12, signals=signals, discover=True)["items"]
+            rows.append({"id": f"cat-{c.lower()}", "category": c, "title": f"More {c} for {name}", "items": items})
+
+        with_image = [i for i in top_picks[:10] if i["image_url"]] or top_picks[:3]
+        hero = random.sample(with_image, min(3, len(with_image)))
+        return {"hero": hero, "rows": [r for r in rows if r["items"]]}
+
+    def made_for_you(self, ctx: UserContext, popularity: dict[int, int] | None = None) -> list[dict]:
+        """Personalised rows for the home screen (kept for compatibility; see home())."""
+        return self.home(ctx, popularity)["rows"]
+
+    def category_page(self, ctx: UserContext, category: str,
+                      popularity: dict[int, int] | None = None) -> dict:
+        """Hero + rows + popular tags for one category page."""
+        self.ensure_loaded()
+        category = next((c for c in self.categories if c.lower() == category.lower()), None)
+        if category is None:
+            return {"category": None, "hero": [], "rows": [], "tags": []}
+        signals = self.build_signals(ctx)
+        scores = self.score(ctx, "", signals)
+        in_cat = self.df["category"] == category
+        allowed = in_cat & ~self.df["id"].isin(signals.disliked)
+        name = ctx.name or "you"
+        rows = []
+        picks = self.recommend(ctx, category=category, limit=16, discover=True, signals=signals)["items"]
+        rows.append({"id": "picks", "title": f"Top picks in {category} for {name}", "items": picks})
+
+        anchor = next((i for i in signals.liked if self.df.at[self.id_to_idx[i], "category"] == category), None)
+        if anchor is None and signals.liked:
+            anchor = signals.liked[0]
+        if anchor is not None:
+            a_idx = self.id_to_idx[anchor]
+            sim = pd.Series(cosine_similarity(self.matrix[a_idx], self.matrix).ravel(), index=self.df.index)
+            near = sim[allowed & (self.df["id"] != anchor) & (sim > 0.03)].sort_values(ascending=False).head(12)
+            title = self.df.at[a_idx, "title"]
+            rows.append({"id": "because", "title": f"Because you liked {title}",
+                         "items": self._cards(near.index, scores, signals, f"Because you liked {title}")})
+
+        rated = self.df.loc[allowed, "norm_rating"].sort_values(ascending=False)
+        rows.append({"id": "top-rated", "title": f"Top rated {category}",
+                     "items": self._cards(rated.head(12).index, scores, signals, f"Highly rated in {category}")})
+        pop = self.df["id"].map(popularity or {}).fillna(0)
+        gems = self.df.loc[allowed & (self.df["norm_rating"] >= rated.quantile(0.6)) & (pop <= pop[in_cat].median())]
+        gems = scores.loc[gems.index, "final"].sort_values(ascending=False).iloc[12:24]
+        rows.append({"id": "gems", "title": "Hidden gems",
+                     "items": self._cards(gems.index, scores, signals, "A hidden gem worth a look")})
+
+        tags = Counter(t.lower() for ts in self.df.loc[in_cat, "tags"] for t in ts)
+        hero_pool = [i for i in picks[:8] if i["image_url"]] or picks[:3]
+        return {"category": category, "hero": random.sample(hero_pool, min(3, len(hero_pool))),
+                "rows": [r for r in rows if r["items"]], "tags": [t for t, _ in tags.most_common(16)]}
 
     def taste(self, ctx: UserContext) -> dict:
         """Category affinity (for the radar chart) and weighted top tags."""

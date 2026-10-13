@@ -152,14 +152,33 @@ def get_profile(user_id: str) -> dict:
     return rows[0] if rows else {"id": user_id, "name": "", "interests": [], "is_admin": False}
 
 
-def get_interactions(user_id: str) -> list[dict]:
-    return _fetch_all("interactions", "item_id,action,created_at", user_id=user_id)
+def get_viewer_profile(account_id: str, profile_id: str) -> dict | None:
+    """The viewer profile, only if it belongs to this account (never trust the id alone)."""
+    rows = (client().table("viewer_profiles").select("*")
+            .eq("id", profile_id).eq("account_id", account_id).limit(1).execute().data)
+    return rows[0] if rows else None
 
 
-def get_searches(user_id: str, limit: int = 30) -> list[dict]:
+def _scoped(query, user_id: str, profile_id: str | None):
+    query = query.eq("user_id", user_id)
+    return query.eq("profile_id", profile_id) if profile_id else query.is_("profile_id", "null")
+
+
+def get_interactions(user_id: str, profile_id: str | None = None) -> list[dict]:
+    rows, start = [], 0
+    while True:
+        batch = (_scoped(client().table("interactions").select("item_id,action,created_at"), user_id, profile_id)
+                 .range(start, start + PAGE_SIZE - 1).execute().data or [])
+        rows.extend(batch)
+        if len(batch) < PAGE_SIZE:
+            return rows
+        start += PAGE_SIZE
+
+
+def get_searches(user_id: str, limit: int = 30, profile_id: str | None = None) -> list[dict]:
     return (
-        client().table("searches").select("query,category,created_at")
-        .eq("user_id", user_id).order("created_at", desc=True).limit(limit).execute().data or []
+        _scoped(client().table("searches").select("query,category,created_at"), user_id, profile_id)
+        .order("created_at", desc=True).limit(limit).execute().data or []
     )
 
 

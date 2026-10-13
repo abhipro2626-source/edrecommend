@@ -75,15 +75,25 @@ async def fallback_handler(_: Request, exc: Exception):
 
 
 # ------------------------------------------------------------------ auth
-def current_user(authorization: str = Header(default="")) -> dict:
-    """Verify the Supabase JWT and return {id, profile}."""
+def current_user(authorization: str = Header(default=""),
+                 x_profile_id: str = Header(default="")) -> dict:
+    """Verify the Supabase JWT and return {id, profile, viewer}.
+
+    `viewer` is the active "Who's exploring?" profile. Its id comes from the
+    X-Profile-Id header but is only used after checking it belongs to this account.
+    """
     token = authorization.removeprefix("Bearer ").strip()
     if not token:
         raise FriendlyError("Please log in first.", 401)
     user = db.user_from_token(token)
     if user is None:
         raise FriendlyError("Your session has expired. Please log in again.", 401)
-    return {"id": user.id, "profile": db.get_profile(user.id)}
+    viewer = None
+    if x_profile_id.strip():
+        viewer = db.get_viewer_profile(user.id, x_profile_id.strip())
+        if viewer is None:
+            raise FriendlyError("That profile isn't on your account — pick a profile again.", 403)
+    return {"id": user.id, "profile": db.get_profile(user.id), "viewer": viewer}
 
 
 def admin_user(user: dict = Depends(current_user)) -> dict:
@@ -93,12 +103,15 @@ def admin_user(user: dict = Depends(current_user)) -> dict:
 
 
 def user_context(user: dict) -> UserContext:
-    profile = user["profile"]
+    """Everything the engine needs, scoped to the active viewer profile (or the account)."""
+    viewer = user.get("viewer")
+    source = viewer or user["profile"]
+    profile_id = viewer["id"] if viewer else None
     return UserContext(
-        name=profile.get("name") or "",
-        interests=profile.get("interests") or [],
-        interactions=db.get_interactions(user["id"]),
-        searches=db.get_searches(user["id"]),
+        name=source.get("name") or "",
+        interests=source.get("interests") or [],
+        interactions=db.get_interactions(user["id"], profile_id),
+        searches=db.get_searches(user["id"], profile_id=profile_id),
     )
 
 
@@ -106,7 +119,7 @@ def popularity(days: int = 30) -> dict[int, int]:
     """Anonymous counts of recent positive interactions per item (no user ids leave this function)."""
     since = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
     rows = (db.client().table("interactions").select("item_id")
-            .in_("action", ["like", "save", "view"]).gte("created_at", since)
+            .in_("action", ["like", "love", "save", "view"]).gte("created_at", since)
             .limit(5000).execute().data or [])
     counts: dict[int, int] = {}
     for row in rows:
@@ -160,7 +173,17 @@ def recommend(body: RecommendBody, user: dict = Depends(current_user)):
 
 @app.get("/api/made-for-you")
 def made_for_you(user: dict = Depends(current_user)):
-    return {"rows": engine.made_for_you(user_context(user), popularity())}
+    """Home screen: `rows` (unchanged contract) plus `hero` billboard items."""
+    return engine.home(user_context(user), popularity())
+
+
+@app.get("/api/category/{name}")
+def category_page(name: str, user: dict = Depends(current_user)):
+    """Category page: hero items, rows (top picks, because you liked, top rated, hidden gems) and tags."""
+    result = engine.category_page(user_context(user), name, popularity())
+    if result["category"] is None:
+        raise FriendlyError("That category doesn't exist.", 404)
+    return result
 
 
 @app.get("/api/similar/{item_id}")
@@ -195,11 +218,12 @@ def item_detail(item_id: int, user: dict = Depends(current_user)):
 @app.get("/api/profile/taste")
 def taste(user: dict = Depends(current_user)):
     ctx = user_context(user)
-    counts = {"like": 0, "save": 0, "dislike": 0, "view": 0}
+    counts = {"like": 0, "love": 0, "save": 0, "dislike": 0, "view": 0}
     for row in ctx.interactions:
         if row["action"] in counts:
             counts[row["action"]] += 1
-    return {**engine.taste(ctx), "stats": {**counts, "searches": len(db.get_searches(user["id"], 1000))}}
+    viewer_id = user["viewer"]["id"] if user.get("viewer") else None
+    return {**engine.taste(ctx), "stats": {**counts, "searches": len(db.get_searches(user["id"], 1000, viewer_id))}}
 
 
 def safe_dataset_name(filename: str, category: str | None) -> str:

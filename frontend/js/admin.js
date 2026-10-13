@@ -201,11 +201,13 @@ export function openImportModal() {
     form.append('category', $('#import-category').value.trim());
     form.append('save_to_data', $('#import-save').checked);
     go.disabled = true; go.classList.add('loading'); go.textContent = 'Importing…';
+    go.insertAdjacentHTML('afterend', '<div class="import-progress" id="import-progress" role="progressbar" aria-label="Importing"><i></i></div>');
     try {
       const res = await api('/api/import', { method: 'POST', form });
       showSummary(res);
     } catch (err) {
       $('#import-error').textContent = err.message;
+      $('#import-progress')?.remove();
       go.disabled = false; go.classList.remove('loading'); go.textContent = 'Import';
     }
   });

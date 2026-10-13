@@ -40,7 +40,7 @@ CATEGORY_WORDS = {
 }
 
 # ---- Interaction signal strengths for the user profile vector ----
-ACTION_WEIGHTS = {"like": 1.0, "save": 0.8, "view": 0.3, "click": 0.2, "dislike": -1.0}
+ACTION_WEIGHTS = {"love": 1.5, "like": 1.0, "save": 0.8, "view": 0.3, "click": 0.2, "dislike": -1.0}
 DECAY_HALF_LIFE_DAYS = 14   # an action loses half its weight every two weeks
 
 # ---- Misc ----
