@@ -22,6 +22,7 @@ const INTERESTS = ['Movies', 'Books', 'Python', 'AI', 'Space', 'Psychology', 'De
 const ROUTES = ['home', 'foryou', 'explore', 'search', 'mylist', 'likes', 'profile', 'how', 'admin'];
 const VIEW_OF = { explore: 'search' };
 const HERO_VIEWS = ['home', 'category'];
+const DEFAULT_CATEGORIES = ['Movies', 'Books', 'Courses', 'Jobs', 'Apps', 'Games', 'Technology'];
 
 let homeCache = null;
 const categoryCache = new Map();
@@ -313,15 +314,29 @@ async function startApp() {
   $$('.admin-only').forEach((el) => { el.hidden = !state.profile.is_admin; });
   try { await loadInteractions(); } catch { toast('Couldn’t load your history.', 'error'); }
   const h = await health();
-  if (h.status === 'offline') toast("Can't reach the EDRecommend server. It may be waking up — give it a minute.", 'error', 7000);
-  else if (h.status !== 'ok') toast(h.message || 'The server is not fully set up yet.', 'error', 6000);
-  state.categories = ['All', ...(h.categories || [])];
-  state.categoryCounts = h.category_counts || {};
-  state.weights = h.weights || null;
-  renderChips();
+  applyHealth(h);
+  if (h.status === 'waking' || h.status === 'offline') {
+    toast('The server is waking up — your recommendations will appear in a moment.', 'info', 7000);
+    say('Waking up the engine… ⏳');
+    health(90000).then(applyHealth);          // fill in live counts once it answers
+  } else if (h.status !== 'ok') {
+    toast(h.message || 'The server is not fully set up yet.', 'error', 6000);
+  }
   initRobot(surprise);
   lastRoute = '';
   route();
+}
+
+/** Use live categories when the server answered; otherwise the standard seven. */
+function applyHealth(h) {
+  if (h.status === 'ok' && h.categories?.length) {
+    state.categories = ['All', ...h.categories];
+    state.categoryCounts = h.category_counts || {};
+    state.weights = h.weights || null;
+  } else if (state.categories.length < 2) {
+    state.categories = ['All', ...DEFAULT_CATEGORIES];
+  }
+  renderChips();
 }
 
 async function surprise() {
@@ -658,7 +673,7 @@ async function boot() {
   const session = await splash(async (progress) => {
     progress(0.4, 'Checking the recommendation engine…');
     const h = await health();
-    progress(0.75, h.status === 'ok' ? `${h.items} items ready` : 'Connecting…');
+    progress(0.75, h.status === 'ok' ? `${h.items} items ready` : 'The server is waking up…');
     return getSession();
   });
   sb.auth.onAuthStateChange((event) => { if (event === 'SIGNED_OUT' && started) showAuth(); });

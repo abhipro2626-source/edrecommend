@@ -63,12 +63,20 @@ export async function api(path, { method = 'GET', body, form } = {}) {
   return data;
 }
 
-export async function health() {
+/**
+ * Server status. Never waits longer than `ms`: the free Render server can take ~50s to
+ * wake up, and the splash screen must not hang on it.
+ */
+export async function health(ms = 6000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
   try {
-    const r = await fetch(`${API_BASE}/api/health`);
+    const r = await fetch(`${API_BASE}/api/health`, { signal: controller.signal });
     return await r.json();
   } catch {
-    return { status: 'offline' };
+    return { status: controller.signal.aborted ? 'waking' : 'offline' };
+  } finally {
+    clearTimeout(timer);
   }
 }
 
